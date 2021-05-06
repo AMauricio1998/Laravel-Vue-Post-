@@ -24,7 +24,7 @@
 <script>
 export default {
     created(){
-        console.log("Hola mundo Vue");
+        console.log("Hola mundo Vue " + this.$route.params.id);
     },
     methods: {
         getPost: function(){

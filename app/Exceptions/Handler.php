@@ -6,6 +6,7 @@ use Exception;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -56,9 +57,9 @@ class Handler extends ExceptionHandler
     {
         //dd($exception);
 
-        if (env('APP_ENV') == 'local') {
-            return parent::render($request, $exception);
-        }
+        // if (env('APP_ENV') == 'local') {
+            // return parent::render($request, $exception);
+        // }
 
         if ($exception instanceof NotFoundHttpException) {
             return $this->errorResponse("Pagina no encontrada", $code = 404, $msj = 'Pagina no encontrada');

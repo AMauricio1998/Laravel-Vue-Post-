@@ -1970,7 +1970,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
-    console.log("Hola mundo Vue");
+    console.log("Hola mundo Vue " + this.$route.params.id);
   },
   methods: {
     getPost: function getPost() {}
@@ -2017,40 +2017,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    this.getPost();
+  },
   methods: {
     postClick: function postClick(p) {
       this.postSelected = p;
+    },
+    getPost: function getPost() {
+      var _this = this;
+
+      fetch('http://larablog.test/api/post').then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        return _this.posts = json.data.data;
+      }); // fetch('/api/post')
+      // .then(function(response){
+      //     return response.json();
+      // })
+      // .then(function(json){
+      //     this.posts = json.data.data;
+      //     // console.log(json.data.data[0].title);
+      // })
     }
   },
   data: function data() {
     return {
       postSelected: "",
-      posts: [{
-        id: 1,
-        title: 'titulo 10000000',
-        image: '1617231748.png',
-        content: 'Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.0'
-      }, {
-        id: 2,
-        title: 'titulo 2',
-        image: '1617231748.png',
-        content: 'Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.0'
-      }, {
-        id: 3,
-        title: 'titulo 3',
-        image: '1617231748.png',
-        content: 'Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.0'
-      }, {
-        id: 4,
-        title: 'titulo 4',
-        image: '1617231748.png',
-        content: 'Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.0'
-      }, {
-        id: 5,
-        title: 'titulo 5',
-        image: '1617231748.png',
-        content: 'Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.0'
-      }]
+      posts: []
     };
   }
 });
@@ -37904,7 +37898,7 @@ var render = function() {
                 "router-link",
                 {
                   staticClass: "btn btn-success",
-                  attrs: { to: "detail/" + post.id }
+                  attrs: { to: { name: "detail", params: { id: post.id } } }
                 },
                 [_vm._v("Ver")]
               )
@@ -53390,12 +53384,15 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  mode: 'history',
   routes: [{
     path: '/',
-    component: _components_PostListComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    component: _components_PostListComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    name: "List"
   }, {
     path: '/detail/:id',
-    component: _components_PostDetailComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _components_PostDetailComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    name: "detail"
   }]
 }));
 

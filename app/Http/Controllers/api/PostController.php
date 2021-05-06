@@ -19,7 +19,7 @@ class PostController extends ApiResponseController
         //seleccionamos todos los datos de la tabla post, como la tabla post y categories tienen title repetido
         //retornamos el title de la tabla categories con un alias y por ultimo selecciona la imagen del post
         select('posts.*', 'categories.title as category', 'post_images.image')->
-        orderBy('posts.created_at','desc')->paginate(2);
+        orderBy('posts.created_at','desc')->paginate(10);
         //retornamos la respuesta json de datos del post
         return $this->succesResponse($posts);
     }
