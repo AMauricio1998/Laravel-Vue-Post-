@@ -1,9 +1,7 @@
 <template>
-
     <div>
 
-        <router-link class="btn btn-success" :to="{ name: 'contact'}">Contacto</router-link> 
-
+        <h1>{{ category.title }}</h1>
 
         <post-list-default 
         :key="currentPage"
@@ -26,22 +24,14 @@ export default {
             this.postSelected = p;
         },
         getPosts(){
-            fetch('http://larablog.test/api/post?page=' + this.currentPage)
+            console.log("_____" + this.$route.params.category_id);
+            fetch('http://larablog.test/api/post/' + this.$route.params.category_id + "/category?page=" + this.currentPage)
             .then(response => response.json())
             .then(json => {
-              this.posts = json.data.data;
-              this.total = json.data.last_page;
-              console.log("getPosts" + this.total)
-              });
-
-            // fetch('/api/post')
-            // .then(function(response){
-            //     return response.json();
-            // })
-            // .then(function(json){
-            //     this.posts = json.data.data;
-            //     // console.log(json.data.data[0].title);
-            // })
+                this.posts = json.data.posts.data;
+                this.total = json.data.posts.last_page;
+                this.category = json.data.category;
+                });
         },
         getCurrentPage: function(val){
           this.currentPage = val
@@ -53,6 +43,7 @@ export default {
       return {
         postSelected: "",
         posts: [],
+        category: "",
         total: 0,
         currentPage: 1
       };

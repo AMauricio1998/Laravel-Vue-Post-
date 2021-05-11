@@ -5,11 +5,12 @@
         <div class="card mt-3">
                 <!-- concatenar archivos estaticos -->
                 <div class="card-header">
-                    <img :src=" '/images/' + post.image" class="card-img-top">
+                    <img :src=" '/images/' + post.image.image" class="card-img-top">
                 </div>
 
                 <div class="card-body">
                   <h1 lass="card-title">{{ post.title }}</h1>
+                    <router-link class="btn btn-success" :to="{ name: 'post-category', params: {category_id: post.category.id} }">{{post.category.title}}</router-link> 
                   <p class="card-text">{{ post.content }}</p>
                 </div>
               </div>
@@ -24,22 +25,20 @@
 <script>
 export default {
     created(){
-        console.log("Hola mundo Vue " + this.$route.params.id);
+        this.getPost();
     },
     methods: {
         getPost: function(){
-        }
+        fetch("http://larablog.test/api/post/" + this.$route.params.id)
+        .then(response => response.json())
+        .then(json => (this.post = json.data));
+     }
     },
-
+    
     data: function () {
       return {
         postSelected: "",
-        post: 
-            {
-                title: 'titulo 10000000', 
-                image: '1617231748.png', 
-                content: 'Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.0', 
-            }
+        post:""
     };
   }
 };

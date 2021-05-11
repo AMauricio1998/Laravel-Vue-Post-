@@ -49,6 +49,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'web\webController@index')->name('index');
 //resolver ruta lado del cliente vue
 Route::get('/detail/{id}', 'web\webController@detail')->name('detail');
+Route::get('/post-category/{id}', 'web\webController@post_category');
+Route::get('/contact', 'web\webController@contact');
 
 
 Route::resource('dashboard/post', 'PostController');

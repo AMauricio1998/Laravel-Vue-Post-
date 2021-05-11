@@ -43,9 +43,19 @@ class PostController extends ApiResponseController
 
 
     public function category(Category $category) {
+        $posts = Post::
+        //Referenciar datos de la tabla imagen por el post_id para referenciar con el id de tabla post
+        join('post_images', 'post_images.post_id', '=', 'posts.id')->
+        join('categories', 'categories.id', '=', 'posts.category_id')->
+        //seleccionamos todos los datos de la tabla post, como la tabla post y categories tienen title repetido
+        //retornamos el title de la tabla categories con un alias y por ultimo selecciona la imagen del post
+        select('posts.*', 'categories.title as category', 'post_images.image')->
+        orderBy('posts.created_at','desc')->
+        where('categories.id', $category->id)
+        ->paginate(10);
        // dd($category->post()); agregar el paginate a los metodos eloquent
        //retornamos un listado de post y el nombre de su categoria
-        return $this->succesResponse(["posts"=>$category->post()->paginate(10), "category" => $category]);
+        return $this->succesResponse(["posts"=>$posts, "category" => $category]);
     }
     
 }
