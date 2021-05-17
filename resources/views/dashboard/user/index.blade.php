@@ -57,7 +57,8 @@
                     <a href="{{ route('user.show', $user->id) }}" class="btn btn-primary">Ver</a>
                     <a href="{{ route('user.edit', $user->id) }}" class="btn btn-primary">Actualizar</a>
                     
-                    <button data-toggle="modal" data-target="#deleteModal" data-id="{{  $user->id }}" class="btn btn-danger">Eliminar</button>
+                    <button data-toggle="modal" data-target="#deleteModal" data-id="{{  $user->id }}" 
+                        class="btn btn-danger">Eliminar</button>
                 </td>
             </tr> 
             @endforeach

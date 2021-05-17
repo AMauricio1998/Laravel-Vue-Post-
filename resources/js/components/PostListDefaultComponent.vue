@@ -8,7 +8,7 @@
                   <h5 class="card-title">{{ post.title }}</h5>
                   <p class="card-text">{{ post.content }}</p>
                   <button class="btn btn-primary" v-on:click="postClick(post)">Ver resumen</button>
-                  <router-link class="btn btn-success" :to="{ name: 'detail', params: {id: post.id} }">Ver</router-link> 
+                  <router-link class="btn btn-success " :to="{ name: 'detail', params: {id: post.id} }">Ver</router-link> 
                 </div>
               </div>
         <modal-post :post="postSelected"></modal-post>

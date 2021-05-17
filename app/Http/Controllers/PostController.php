@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use auth;
 use App\Post;
 use App\Category;
+use App\Helpers\CustomUrl;
 use App\PostImage;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostPost;
@@ -41,6 +42,8 @@ class PostController extends Controller
      */
     public function create()
     {
+        CustomUrl::HolaMundo();
+
         $categories = Category::pluck('id', 'title');
         return view("dashboard.post.create", ['post' => new Post(), 'categories' => $categories]);
     }
@@ -51,24 +54,27 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostPost $request)
+    public function store(Request /*StorePostPost*/ $request)
     {
-        //echo "Hola mundo: ".$request->input('title');
-        //dd($request->validated());
 
         // $request->validate([
         //     'title' => 'required|min:5|max:500',
         //     //'url_clean' => 'required|min:5|max:500',
         //     'content' => 'required|min:5',
         // ]);
+        if($request->url_clean == ""){
+            $urlClean = $this->urlTitle($this->convertAccentedCharacters($request->title),'-', true);
+        }else{
+            $urlClean = $request->url_clean;
+        }
         
-        echo "Hola mundo: ".$request->content;
+        echo "Hola mundo: ".$urlClean;
         
-        Post::create($request->validated());
+        // Post::create($request->validated());
 
         //echo "Hola mundo: ".request("title");
 
-        return back()->with('status', 'Post creado con exito!');
+        // return back()->with('status', 'Post creado con exito!');
 
     }
 
@@ -83,8 +89,40 @@ class PostController extends Controller
         //  $post = Post::findOrFail($post);
 
              return view("dashboard.post.show", ["post" => $post]);
-
      }
+
+     public static function convertAccentedCharacters($str)
+    {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+    }
+
+    private static function urlTitle($str, $separator = '-', $lowercase = false) {
+    if ($separator === 'dash') {
+        $separator = '-';
+    } elseif ($separator === 'underscore') {
+        $separator = '_';
+    }
+
+    $q_separator = preg_quote($separator, '#');
+
+    $trans = array(
+        '&.+?;' => '',
+        '[^\w\d _-]' => '',
+        '\s+' => $separator,
+        '(' . $q_separator . ')+' => $separator,
+    );
+
+    $str = strip_tags($str);
+    foreach ($trans as $key => $val) {
+        $str = preg_replace('#' . $key . '#iu', $val, $str);
+    }
+
+    if ($lowercase === true) {
+        $str = strtolower($str);
+    }
+
+    return trim(trim($str, $separator));
+}
 
     /**
      * Show the form for editing the specified resource.

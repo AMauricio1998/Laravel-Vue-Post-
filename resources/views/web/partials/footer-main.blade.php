@@ -63,7 +63,9 @@
     <!-- Copyright -->
     <div class="bg-dark2 text-center text-white p-3" style="background-color: rgba(253, 246, 246, 0.2);">
       © {{  Date('Y') }} Copyright:
-      <a class="text-white" href="/">Larablog</a>
+      <router-link class="text-white" to="/">Larablog</router-link>
+      <router-link class="text-white"  :to="{ name: 'contact'}"><u>Contacto</u></router-link> 
+
     </div>
     <!-- Copyright -->
   </footer>
