@@ -5,6 +5,33 @@
  */
 
 require('./bootstrap');
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import MyUploadAdapter from "./assets/ckeditor/MyUploadAdapter";
+
+
+
+
+// ...
+
+function MyCustomUploadAdapterPlugin( editor ) {
+    editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+        // Configure the URL to the upload script in your back-end here!
+        return new MyUploadAdapter( loader );
+    };
+}
+
+// ...
+
+
+
+
+ClassicEditor.create(document.querySelector("#content"), {
+    extraPlugins: [ MyCustomUploadAdapterPlugin ]
+})
+    .then(editor => {})
+    .catch(error => {
+        console.error(error.stack);
+    });
 
 import router from './assets/router.js';
 

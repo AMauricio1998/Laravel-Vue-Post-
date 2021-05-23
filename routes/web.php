@@ -56,6 +56,9 @@ Route::get('/contact', 'web\webController@contact');
 
 Route::resource('dashboard/post', 'PostController');
 Route::post('dashboard/post/{post}/image', 'PostController@image')->name('post.image');
+//ruta imagen ckeditor-------------------------------------------
+Route::post('dashboard/post/content_image', 'PostController@contentImage');
+//----------------------------------------------------------------
 Route::resource('dashboard/category', 'CategoryController');
 Route::resource('dashboard/user', 'UserController');
 Auth::routes();

@@ -4,20 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCategoryPost extends FormRequest
+class UpdatePostPut extends FormRequest
 {
-
-    public static function myRules(){
-        return [
-            'title' => 'required|min:5|max:500',
-            'url_clean' => 'max:500|unique:categories'
-        ];
-    }
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
+
+   
     public function authorize()
     {
         return true;
@@ -28,8 +23,15 @@ class StoreCategoryPost extends FormRequest
      *
      * @return array
      */
+
     public function rules()
     {
-        return $this->myRules();
+        return [
+            'title' => 'required|min:5|max:500',
+            'url_clean' => 'max:500|unique:posts,url_clean,'.$this->route('post')->id,
+            'content' => 'required|min:5',
+            'category_id' => 'required',
+            'posted' => 'required',
+        ];
     }
 }

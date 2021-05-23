@@ -9,6 +9,9 @@ use App\Helpers\CustomUrl;
 use App\PostImage;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostPost;
+use App\Http\Requests\UpdatePostPut;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -42,7 +45,6 @@ class PostController extends Controller
      */
     public function create()
     {
-        CustomUrl::HolaMundo();
 
         $categories = Category::pluck('id', 'title');
         return view("dashboard.post.create", ['post' => new Post(), 'categories' => $categories]);
@@ -54,27 +56,39 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request /*StorePostPost*/ $request)
+    public function store(StorePostPost $request)
     {
-
+     
         // $request->validate([
         //     'title' => 'required|min:5|max:500',
         //     //'url_clean' => 'required|min:5|max:500',
         //     'content' => 'required|min:5',
         // ]);
+        //condicion para crear la url por titulo o url_clean
         if($request->url_clean == ""){
-            $urlClean = $this->urlTitle($this->convertAccentedCharacters($request->title),'-', true);
+            $urlClean = CustomUrl::urlTitle(CustomUrl::convertAccentedCharacters($request->title),'-', true);
         }else{
-            $urlClean = $request->url_clean;
+            $urlClean = CustomUrl::urlTitle(CustomUrl::convertAccentedCharacters($request->url_clean),'-', true);
         }
+        $requestData = $request->validated();
         
-        echo "Hola mundo: ".$urlClean;
+        $requestData['url_clean'] = $urlClean;
+
+        $validator = Validator::make($requestData, StorePostPost::myRules());
+
+        if ($validator->fails()) {
+            return redirect('dashboard/post/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        //dd($requestData);
         
-        // Post::create($request->validated());
+        Post::create($requestData);
 
         //echo "Hola mundo: ".request("title");
 
-        // return back()->with('status', 'Post creado con exito!');
+        return back()->with('status', 'Post creado con exito!');
 
     }
 
@@ -91,38 +105,7 @@ class PostController extends Controller
              return view("dashboard.post.show", ["post" => $post]);
      }
 
-     public static function convertAccentedCharacters($str)
-    {
-        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
-    }
-
-    private static function urlTitle($str, $separator = '-', $lowercase = false) {
-    if ($separator === 'dash') {
-        $separator = '-';
-    } elseif ($separator === 'underscore') {
-        $separator = '_';
-    }
-
-    $q_separator = preg_quote($separator, '#');
-
-    $trans = array(
-        '&.+?;' => '',
-        '[^\w\d _-]' => '',
-        '\s+' => $separator,
-        '(' . $q_separator . ')+' => $separator,
-    );
-
-    $str = strip_tags($str);
-    foreach ($trans as $key => $val) {
-        $str = preg_replace('#' . $key . '#iu', $val, $str);
-    }
-
-    if ($lowercase === true) {
-        $str = strtolower($str);
-    }
-
-    return trim(trim($str, $separator));
-}
+     
 
     /**
      * Show the form for editing the specified resource.
@@ -143,7 +126,7 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-     public function update(StorePostPost $request, Post $post)
+     public function update(UpdatePostPut $request, Post $post)
      {        
         $post->update($request->validated());
 
@@ -163,6 +146,23 @@ class PostController extends Controller
         PostImage::create([ 'image' => $filename, 'post_id'=> $post->id]);
         return back()->with('status', 'Imagen cargada con exito!');
      }
+
+
+//----------imagen desde ckeditor----------------------------------------
+     public function contentImage(Request $request)
+     {        
+        $request->validate([
+            'image' => 'required|mimes:jpeg,png,jpg,bmp|max:10240', //10Mb
+        ]);
+
+        $filename = time() . "." . $request->image->extension();
+
+        $request->image->move(public_path('images_post'), $filename);
+
+        return response()->json(["default" => URL::to('/') . '/images_post/' . $filename]);
+
+     }
+//-----------------------------------------------------------------
 
     /**
      * Remove the specified resource from storage.

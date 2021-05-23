@@ -35,6 +35,7 @@
     <label for="content">Contenido</label>
     <textarea class="form-control" id="content" name="content" rows="3">{{ old('content',$post->content) }}</textarea>
 </div>
+<input type="hidden" id="token" value="{{ csrf_token() }}">
 
 <input type="submit" value="Enviar" class="btn btn-primary">
 
