@@ -59,6 +59,13 @@ Route::resource('dashboard/contact', 'ContactController')->only([
     'index', 'show', 'destroy',
 ]);
 
+Route::resource('dashboard/post-comment', 'PostCommentController')->only([
+    'index', 'show', 'destroy',
+]);
+
+Route::get('dashboard/post-comment/{post}/post', 'PostCommentController@post')->name('post-comment.post');
+
+
 Route::post('dashboard/post/{post}/image', 'PostController@image')->name('post.image');
 //ruta imagen ckeditor-------------------------------------------
 Route::post('dashboard/post/content_image', 'PostController@contentImage');

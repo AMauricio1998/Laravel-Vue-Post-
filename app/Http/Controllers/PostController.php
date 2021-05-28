@@ -31,7 +31,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::orderBy('created_at','desc')
-            ->paginate(5);
+            ->paginate(10);
 
         //dd($posts);
 
@@ -92,12 +92,7 @@ class PostController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+  
      public function show(Post $post)
      {
         //  $post = Post::findOrFail($post);
@@ -105,14 +100,7 @@ class PostController extends Controller
              return view("dashboard.post.show", ["post" => $post]);
      }
 
-     
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
      public function edit(Post $post)
      {
         $categories = Category::pluck('id', 'title');

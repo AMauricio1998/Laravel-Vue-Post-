@@ -2,8 +2,9 @@
 
 @section('content')<br>
 
+@if (count($postComments) > 0)
+    
 
-    <a class="btn btn-success mt-3 mb-3" href="{{ route('post.create') }}">Crear Post</a>
     <table class="table">
         <thead>
             <tr>
@@ -14,10 +15,10 @@
                     Titulo
                 </td>
                 <td>
-                    Posteado
+                    Aprovado
                 </td>
                 <td>
-                    Categoría
+                    Usuario
                 </td>
                 <td>
                     Creacion
@@ -31,32 +32,30 @@
             </tr>       
         </thead>
         <tbody>
-            @foreach ($posts as $post)
+            @foreach ($postComments as $postComment)
             <tr>
                 <td>
-                    {{ $post->id }}
+                    {{ $postComment->id }}
                 </td>
                 <td>
-                    {{ $post->title }}
+                    {{ $postComment->title }}
                 </td>
                 <td>
-                    {{ $post->posted }}
+                    {{ $postComment->approved }}
                 </td>
                 <td>
-                    {{ $post->category->title }}
+                    {{ $postComment->user->name }}
                 </td>
                 <td>
-                    {{ $post->created_at->format('d-M-Y') }}
+                    {{ $postComment->created_at->format('d-M-Y') }}
                 </td>
                 <td>
-                    {{ $post->updated_at->format('d-M-Y') }}
+                    {{ $postComment->updated_at->format('d-M-Y') }}
                 </td>
                 <td>
-                    <a href="{{ route('post.show', $post->id) }}" class="btn btn-primary">Ver</a>
-                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary">Actualizar</a>
-                    <a href="{{ route('post-comment.post', $post->id) }}" class="btn btn-primary">Comentarios</a>
+                    <a href="{{ route('post-comment.show', $postComment->id) }}" class="btn btn-primary">Ver</a>
                     
-                    <button data-toggle="modal" data-target="#deleteModal" data-id="{{  $post->id }}" class="btn btn-danger">Eliminar</button>
+                    <button data-toggle="modal" data-target="#deleteModal" data-id="{{  $postComment->id }}" class="btn btn-danger">Eliminar</button>
                 </td>
             </tr> 
             @endforeach
@@ -64,7 +63,7 @@
     </table>
 
 
-    {{ $posts->links() }}
+    {{ $postComments->links() }}
 
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -81,7 +80,7 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-              <form action="{{ route('post.destroy', 0) }}" data-action="{{ route('post.destroy', 0) }}" method="POST" id="formDelete">
+              <form action="{{ route('post-comment.destroy', 0) }}" data-action="{{ route('post-comment.destroy', 0) }}" method="POST" id="formDelete">
                 @method('DELETE')
                 @csrf
                 <button type="submit" class="btn btn-danger">Borrar</button>
@@ -112,6 +111,10 @@
           })
             }
       </script>
+          
+      @else
+          <h1>No hay comentarios para este Post</h1>
+      @endif
 
 @endsection
 
