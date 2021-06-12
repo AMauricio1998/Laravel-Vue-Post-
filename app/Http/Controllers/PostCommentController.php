@@ -48,6 +48,29 @@ class PostCommentController extends Controller{
              return view("dashboard.post-comment.show", ["postComment" => $postComment]);
      }
 
+     public function jshow(PostComment $postComment)
+     {
+        //  $postComment = PostComment::findOrFail($postComment);
+
+            return response()->json($postComment);
+            //instruccion para devolver una vista a un modal
+            //return view("dashboard.post-comment.show", ["postComment" => $postComment]);
+
+     }
+
+     public function proccess(PostComment $postComment)
+     {
+        if($postComment->approved == '0'){
+            $postComment->approved = '1';
+        }else{
+            $postComment->approved = '0';
+        }
+        $postComment->save();
+
+            return response()->json($postComment->approved);
+
+     }
+
 
      public function destroy(PostComment $postComment)
      {

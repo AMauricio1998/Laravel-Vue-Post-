@@ -18,7 +18,7 @@
         <input class="form-control" type="email" name="email" id="email" value="{{ old('email', $user->email) }}">
     </div>
 
-    @if ($pasw)
+    @if ($passw)
     
     <div class="form-group">
         <label for="password">Password</label>

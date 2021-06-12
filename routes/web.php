@@ -64,6 +64,8 @@ Route::resource('dashboard/post-comment', 'PostCommentController')->only([
 ]);
 
 Route::get('dashboard/post-comment/{post}/post', 'PostCommentController@post')->name('post-comment.post');
+Route::get('dashboard/post-comment/j-show/{postComment}', 'PostCommentController@jshow');
+Route::post('dashboard/post-comment/proccess/{postComment}', 'PostCommentController@proccess');
 
 
 Route::post('dashboard/post/{post}/image', 'PostController@image')->name('post.image');
