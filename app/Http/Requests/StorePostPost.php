@@ -19,6 +19,7 @@ class StorePostPost extends FormRequest
         'content' => 'required|min:5',
         'category_id' => 'required',
         'posted' => 'required',
+        'tags_id' => 'required',
     ];
 }
     public function authorize()

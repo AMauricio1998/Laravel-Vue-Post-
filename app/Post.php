@@ -23,4 +23,11 @@ class Post extends Model
     public function image(){
         return $this->hasOne(PostImage::class);
     }
+
+    
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+    
 }

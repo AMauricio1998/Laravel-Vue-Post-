@@ -10,6 +10,8 @@ use App\PostImage;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostPost;
 use App\Http\Requests\UpdatePostPut;
+use App\Tag;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,6 +32,31 @@ class PostController extends Controller
     
     public function index()
     {
+
+         $personas = [
+             ["nombre" => "Mauricio 0", "edad" => 50],
+             ["nombre" => "Mauricio 1", "edad" => 70],
+             ["nombre" => "Mauricio 2", "edad" => 15],
+         ];
+        // dd($personas);
+
+         $collection1 = collect($personas);
+        // dd($collection1);
+         $collection2 = new Collection($personas);
+        // dd($collection2);
+         $collection3 = Collection::make($personas);
+        // dd($collection3);
+
+        // dd($collection2->filter(function($value, $key){
+        //     return $value['edad'] > 17;
+        // })
+        // ->sum('edad'));
+
+        $personas = ["nombre 1", "nombre 2", "nombre 3", "nombre 4", "nombre 1"];
+
+        $collection = collect($personas);
+        //dd((bool) $collection->intersect(['nombre 1'])->count());
+
         $posts = Post::orderBy('created_at','desc')
             ->paginate(10);
 
@@ -45,9 +72,10 @@ class PostController extends Controller
      */
     public function create()
     {
-
+        $tags = Tag::pluck('id', 'title');
         $categories = Category::pluck('id', 'title');
-        return view("dashboard.post.create", ['post' => new Post(), 'categories' => $categories]);
+        $post = new Post();
+        return view("dashboard.post.create", compact('post', 'categories', 'tags' ));
     }
 
     /**
@@ -83,10 +111,9 @@ class PostController extends Controller
         }
 
         //dd($requestData);
+        $post = Post::create($requestData);
         
-        Post::create($requestData);
-
-        //echo "Hola mundo: ".request("title");
+        $post->tags()->sync($request->tags_id);
 
         return back()->with('status', 'Post creado con exito!');
 
@@ -103,8 +130,14 @@ class PostController extends Controller
 
      public function edit(Post $post)
      {
+        // dd($post->tags);
+        $tag = Tag::find(1);
+        // dd($tag->posts);
+
+        $tags = Tag::pluck('id', 'title');
+
         $categories = Category::pluck('id', 'title');
-        return view("dashboard.post.edit", ['post' => $post, 'categories' => $categories]);      
+        return view("dashboard.post.edit",compact('post', 'categories', 'tags' ));      
     }
 
     /**
@@ -116,6 +149,12 @@ class PostController extends Controller
      */
      public function update(UpdatePostPut $request, Post $post)
      {        
+
+        //dd($request->tags_id);
+
+        // $post->tags()->attach(1);
+        $post->tags()->sync($request->tags_id);
+
         $post->update($request->validated());
 
         return back()->with('status', 'Post actualizado con exito!');
