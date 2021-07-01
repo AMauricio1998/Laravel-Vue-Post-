@@ -9,7 +9,12 @@ class Tag extends Model
     
     public function posts()
     {
-        return $this->belongsToMany(Post::class);
+        return $this->morphedByMany(Post::class, 'taggable');
+    }
+
+    public function users()
+    {
+        return $this->morphedByMany(User::class, 'taggable');
     }
     
 }

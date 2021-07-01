@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use auth;
+use App\Tag;
 use App\Post;
 use App\Category;
-use App\Helpers\CustomUrl;
 use App\PostImage;
+use App\Helpers\CustomUrl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use App\Http\Requests\StorePostPost;
 use App\Http\Requests\UpdatePostPut;
-use App\Tag;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -33,7 +35,37 @@ class PostController extends Controller
     public function index()
     {
 
-         $personas = [
+    //----------Funcion file storage----------------------------------------------------
+        //dd(storage_path('app'));
+
+    // return Storage::disk('local')->download('zhErjkxyTbaPNP0sZkcbc35JXI8EnOugpoqBhV2M.jpg', 'mau.jpg'); 
+    //return Storage::download('zhErjkxyTbaPNP0sZkcbc35JXI8EnOugpoqBhV2M.jpg', 'mau.jpg');
+//------------------------------PRUEBAS TRANSACCIONES-----------------------------------
+        /*DB::transaction(function () {
+
+             DB::table('contacts')
+                 ->where(["id" => 1])
+                 ->delete(); 
+
+            $contact = DB::select('select * from contacts where id = ?', [5]);
+            dd($contact[0]);
+            
+            DB::table('contacts')
+                ->where(["id" => 10])
+                ->update(['name' => "Maurio el grande"]);   
+        });
+
+         DB::beginTransaction();
+         DB::table('contacts')
+                  ->where(["id" => 7])
+                  ->delete();
+                  
+            $contact = DB::select('select * from contacts where id = ?', [50]);
+            dd($contact[0]);
+         db::commit();
+         DB::rollBack();*/
+//----------------Prueba Colecciones-----------------------------------------------
+         /*$personas = [
              ["nombre" => "Mauricio 0", "edad" => 50],
              ["nombre" => "Mauricio 1", "edad" => 70],
              ["nombre" => "Mauricio 2", "edad" => 15],
@@ -55,9 +87,10 @@ class PostController extends Controller
         $personas = ["nombre 1", "nombre 2", "nombre 3", "nombre 4", "nombre 1"];
 
         $collection = collect($personas);
-        //dd((bool) $collection->intersect(['nombre 1'])->count());
+        //dd((bool) $collection->intersect(['nombre 1'])->count());*/
+//-------------------------------------------------------------------------------------
 
-        $posts = Post::orderBy('created_at','desc')
+        $posts = Post::with('category')->orderBy('created_at','desc')
             ->paginate(10);
 
         //dd($posts);
@@ -89,7 +122,7 @@ class PostController extends Controller
      
         // $request->validate([
         //     'title' => 'required|min:5|max:500',
-        //     //'url_clean' => 'required|min:5|max:500',
+        //     'url_clean' => 'required|min:5|max:500',
         //     'content' => 'required|min:5',
         // ]);
         //condicion para crear la url por titulo o url_clean
@@ -168,10 +201,25 @@ class PostController extends Controller
 
         $filename = time() . "." . $request->image->extension();
 
-        $request->image->move(public_path('images'), $filename);
+        //$request->image->move(public_path('images'), $filename);
+        $path = $request->image->store('public/images');
+        
 
-        PostImage::create([ 'image' => $filename, 'post_id'=> $post->id]);
+        PostImage::create([ 'image' => $path, 'post_id'=> $post->id]);
         return back()->with('status', 'Imagen cargada con exito!');
+     }
+//-----------------------------------descargar imagenes del post----------
+     public function imageDownload(PostImage $image){
+        // return Storage::disk('local')->download($image->image);
+        return Storage::download($image->image);
+     }
+//------Borrar imagenes del post--------------------------
+     public function imageDelete(PostImage $image){
+        
+        $image->delete();
+        Storage::disk('local')->delete($image->image);
+        return back()->with('status', 'Imagen eliminada con exito!');
+        //return Storage::delete($image->image);
      }
 
 

@@ -5,7 +5,7 @@
         <div class="card mt-3">
                 <!-- concatenar archivos estaticos -->
                 <div class="card-header">
-                    <img :src=" '/images/' + post.image.image" class="card-img-top">
+                    <img :src="post.image.image" class="card-img-top">
                 </div>
 
                 <div class="card-body">

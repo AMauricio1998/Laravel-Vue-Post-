@@ -67,8 +67,12 @@ Route::get('dashboard/post-comment/{post}/post', 'PostCommentController@post')->
 Route::get('dashboard/post-comment/j-show/{postComment}', 'PostCommentController@jshow');
 Route::post('dashboard/post-comment/proccess/{postComment}', 'PostCommentController@proccess');
 
-
+//----------ruta imagenes---------------
 Route::post('dashboard/post/{post}/image', 'PostController@image')->name('post.image');
+
+Route::get('dashboard/post/image-download/{image}', 'PostController@imageDownload')->name('post.image-download');
+Route::delete('dashboard/post/image-delete/{image}', 'PostController@imageDelete')->name('post.image-delete');
+
 //ruta imagen ckeditor-------------------------------------------
 Route::post('dashboard/post/content_image', 'PostController@contentImage');
 //----------------------------------------------------------------

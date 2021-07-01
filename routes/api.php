@@ -1,8 +1,15 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+// DB::listen(function ($query) {
+//     echo "<code>".$query->sql."<code>";
+//     echo "<code>".$query->time."<code>";
+//     // $query->bindings
+// });
 /*
 |--------------------------------------------------------------------------
 | API Routes

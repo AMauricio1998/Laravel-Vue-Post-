@@ -27,6 +27,7 @@ class PostController extends ApiResponseController
     public function show(Post $post) {
         //obtiene los datos de la imagen, ejecuta la relacion que tenemos en el modelo
         $post->image;
+        $post->images;
         $post->category;
         return $this->succesResponse($post);
          //obtenemos todos los registros de nuestro modelo post, paginados, para poder mostrarlos

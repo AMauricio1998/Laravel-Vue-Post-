@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Tag;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -23,7 +24,12 @@ class UserController extends Controller
     
     public function index()
     {
-        $users = User::orderBy('created_at','desc')
+
+        // dd(Tag::find(1)->users());
+
+        User::find(2)->tags()->sync([1,2,3,4]);
+
+        $users = User::with('rol')->orderBy('created_at','desc')
             ->paginate(5);
 
         return view('dashboard.user.index',['users' => $users]);

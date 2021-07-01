@@ -3,7 +3,7 @@
     <div>
         <div class="card mt-3"  v-for="post in posts"  :key="post.title">
                 <!-- concatenar archivos estaticos -->
-                <img :src=" '/images/' + post.image" class="card-img-top" alt="...">
+                <img :src="post.image" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title">{{ post.title }}</h5>
                   <p class="card-text">{{ post.content }}</p>
