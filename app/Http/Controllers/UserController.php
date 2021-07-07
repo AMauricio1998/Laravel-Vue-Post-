@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Tag;
 use App\User;
+use App\Events\UserCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserPost;
@@ -53,7 +54,7 @@ class UserController extends Controller
      */
     public function store(StoreUserPost $request)
     {
-        User::create(
+        $user = User::create(
             [
                 'rol_id' => 1, //usuario con rol admin
                 'name' => $request['name'],
@@ -62,6 +63,8 @@ class UserController extends Controller
                 'password' => $request['password'],
             ]
         );
+
+        event(new UserCreated($user));
 
         return back()->with('status', 'Usuario creado con exito!');
     }

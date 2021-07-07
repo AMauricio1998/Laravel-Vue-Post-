@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\StorePostPost;
 use App\Http\Requests\UpdatePostPut;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,9 +32,28 @@ class PostController extends Controller
     {
         $this->middleware(['auth', 'rol.admin']);
     }
+
+    private function sendMail(){
+
+        $data['title'] = "Este es un mesaje de prueba";
+
+        Mail::send('emails.email', $data, function($message){
+            $message->to('mau@gmail.com', 'El mau')
+            ->sender('al221910354@gmail.com', 'Alan Mauricio Reyes Telesforo')
+            ->subject("Gracias por escribirnos");
+        });
+
+        if(Mail::failures()){
+            return "Mensaje no enviado";
+        }else{
+            return "Mensaje enviado";
+        }
+        
+    }
     
     public function index()
     {
+        $this->sendMail();
 
     //----------Funcion file storage----------------------------------------------------
         //dd(storage_path('app'));
