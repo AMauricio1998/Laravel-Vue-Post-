@@ -15,6 +15,8 @@
 
     <center>
         <h4>{{ $title }}</h4>
+
+        <img src="https://www.facico-uaemex.mx/2018-2022/imagenes/estudiosavanzados/posgrado-uaemex.jpg" height="150" width="200">
     </center>
     
 </body>

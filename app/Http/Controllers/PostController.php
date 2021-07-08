@@ -51,7 +51,7 @@ class PostController extends Controller
         
     }
     
-    public function index()
+    public function index(Request $request)
     {
         $this->sendMail();
 
@@ -110,8 +110,13 @@ class PostController extends Controller
         //dd((bool) $collection->intersect(['nombre 1'])->count());*/
 //-------------------------------------------------------------------------------------
 
-        $posts = Post::with('category')->orderBy('created_at','desc')
-            ->paginate(10);
+        $posts = Post::with('category')
+            ->orderBy('created_at', request('created_at', 'DESC'));
+
+            if($request->has('search')){
+                $posts = $posts->where('title', 'like', '%'.request('search').'%');
+            }
+            $posts = $posts->paginate(10);
 
         //dd($posts);
 
