@@ -13,8 +13,8 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
- Route::get('/', function () {
-     return view('welcome');
+ Route::get('/home', function () {
+     return view('../resources/views/auth/login.blade.php');
  })->name('home');
 
 // //--------Ruta basica solo texto----------------------

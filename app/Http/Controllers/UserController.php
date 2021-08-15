@@ -20,7 +20,7 @@ class UserController extends Controller
      */
 
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware(['auth', 'rol.admin']);
     }
     
     public function index()
@@ -88,6 +88,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('edit',  $user);
         return view("dashboard.user.edit", ["user" => $user]);      
     }
 
@@ -100,6 +101,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserPut $request, User $user)
     {
+        $this->authorize('edit',  $user);
+
         //echo $request->route('user')->id;
          $user->update(
             [

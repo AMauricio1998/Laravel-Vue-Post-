@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Requests\StorePostPost;
 use App\Http\Requests\UpdatePostPut;
+use App\Jobs\ProcessImageSmall;
+use App\Jobs\SendEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -53,8 +55,9 @@ class PostController extends Controller
     
     public function index(Request $request)
     {
-        $this->sendMail();
-
+        SendEmail::dispatch('al221910354@gmail.com', 'Email enviado por colas');
+        // $this->sendMail();
+        
     //----------Funcion file storage----------------------------------------------------
         //dd(storage_path('app'));
 
@@ -226,11 +229,15 @@ class PostController extends Controller
 
         $filename = time() . "." . $request->image->extension();
 
-        //$request->image->move(public_path('images'), $filename);
-        $path = $request->image->store('public/images');
+        $request->image->move(public_path('images'), $filename);
+        // $path = $request->image->store('public/images');
         
 
-        PostImage::create([ 'image' => $path, 'post_id'=> $post->id]);
+        // PostImage::create([ 'image' => $path, 'post_id'=> $post->id]);
+        $image = PostImage::create([ 'image' => $filename, 'post_id'=> $post->id]);
+
+        ProcessImageSmall::dispatch($image);
+
         return back()->with('status', 'Imagen cargada con exito!');
      }
 //-----------------------------------descargar imagenes del post----------

@@ -3,7 +3,7 @@
 @section('content')<br>
 
 
-    <a class="btn btn-success mt-3 mb-3" href="{{ route('post.create') }}">Crear Post</a>
+    <a class="btn btn-success mt-3 mb-3 fa fa-1x fa-plus-square" href="{{ route('post.create') }}"> Crear Post</a>
 
     <form action="{{ route('post.index') }}" class="form-inline mb-2">
         <select name="created_at" class="form-control ">
@@ -12,7 +12,7 @@
         </select>
 
         <input type="text" value="{{ request('search') }}" name="search" placeholder="Buscar..." class="form-control ml-1">
-        <button type="submit" class="btn btn-success ml-2">Enviar</button>
+        <button type="submit" class="btn btn-success ml-2"><i class="fa fa-1x fa-search"></i></button>
 
     </form>
 
@@ -64,11 +64,11 @@
                     {{ $post->updated_at->format('d-M-Y') }}
                 </td>
                 <td>
-                    <a href="{{ route('post.show', $post->id) }}" class="btn btn-primary">Ver</a>
-                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary">Actualizar</a>
-                    <a href="{{ route('post-comment.post', $post->id) }}" class="btn btn-primary">Comentarios</a>
+                    <a href="{{ route('post.show', $post->id) }}" class="btn btn-primary fa fa-1x fa-eye"></a>
+                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary fa fa-1x fa-edit"></a>
+                    <a href="{{ route('post-comment.post', $post->id) }}" class="btn btn-primary fa fa-1x fa-comments"></a>
                     
-                    <button data-toggle="modal" data-target="#deleteModal" data-id="{{  $post->id }}" class="btn btn-danger">Eliminar</button>
+                    <button data-toggle="modal" data-target="#deleteModal" data-id="{{  $post->id }}" class="btn btn-danger fa fa-1x fa-trash"></button>
                 </td>
             </tr> 
             @endforeach

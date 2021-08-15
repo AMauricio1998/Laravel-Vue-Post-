@@ -5,6 +5,7 @@ namespace App;
 use App\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class PostImage extends Model
 {
@@ -21,6 +22,7 @@ class PostImage extends Model
     //     return Storage::url($value);
     // }
     public function getImageUrl(){
-        return Storage::url($this->image);
+         return URL::asset('images/'.$this->image);
+        //  return Storage::url($this->image);
     }
 }

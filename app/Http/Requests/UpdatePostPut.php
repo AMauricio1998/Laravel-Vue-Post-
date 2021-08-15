@@ -6,11 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostPut extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    // public function messages(){
+    //     return[
+    //         'title.required' => __("messages.titlePost")
+    //     ];
+    // }
+
+    public function attributes(){
+        return[
+            'title' => "Titulo de mi post"
+        ];
+    }
+
 
    
     public function authorize()

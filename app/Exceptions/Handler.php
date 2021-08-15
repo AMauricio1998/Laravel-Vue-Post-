@@ -2,11 +2,12 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Throwable;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Parent_;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -39,7 +40,7 @@ class Handler extends ExceptionHandler
      *
      * @throws \Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable  $exception)
     {
         parent::report($exception);
     }
@@ -53,13 +54,14 @@ class Handler extends ExceptionHandler
      *
      * @throws \Exception
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable  $exception)
     {
         //dd($exception);
+        // dd(Str::contains($request->path(), 'api/'));
 
-        // if (env('APP_ENV') == 'local') {
-            // return parent::render($request, $exception);
-        // }
+         if (env('APP_ENV') == 'local') {
+            return parent::render($request, $exception);
+         }
 
         if ($exception instanceof NotFoundHttpException) {
             return $this->errorResponse("Pagina no encontrada", $code = 404, $msj = 'Pagina no encontrada');
